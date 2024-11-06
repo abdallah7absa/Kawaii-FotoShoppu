@@ -609,18 +609,22 @@ class KawaīFotoShoppu(QMainWindow):
             dialog.show()
 
             if dialog.exec_():
-                self.play_mp3("sounds/button.mp3")
-                self.loading()
-                self.play_mp3('sounds/a41.mp3')
 
                 red, green, blue, threshold = dialog.get_coefficients()
-                self.showing_image = f"assets/output.{self.file_name.split('.')[-1]}"
-                img.rgb_to_binary_pixel_processing(self.file_name, self.showing_image, red, green, blue, threshold)
 
-                self.play_mp3('sounds/a42.mp3')
+                if red + green + blue > 1:
+                    self.play_mp3("sounds/boom.mp3")
+                    self.raise_error("Coefficients Sum must be <= 1, Baaaka!")
 
+                else:
+                    self.play_mp3("sounds/button.mp3")
+                    self.loading()
+                    self.play_mp3('sounds/a41.mp3')
+                    self.showing_image = f"assets/output.{self.file_name.split('.')[-1]}"
+                    img.rgb_to_binary_pixel_processing(self.file_name, self.showing_image, red, green, blue, threshold)
+                    self.play_mp3('sounds/a42.mp3')
+                    self.showing_image_show()
 
-                self.showing_image_show()
             else: self.play_mp3("sounds/baa.mp3")
 
         else:
@@ -644,14 +648,22 @@ class KawaīFotoShoppu(QMainWindow):
             dialog.show()
 
             if dialog.exec_():
-                self.play_mp3("sounds/button.mp3")
-                self.loading()
-                self.play_mp3('sounds/a41.mp3')
+
                 red, green, blue, _ = dialog.get_coefficients()
-                self.showing_image = f"assets/output.{self.file_name.split('.')[-1]}"
-                img.rgb_to_gray_pixel_processing(self.file_name, self.showing_image, red, green, blue)
-                self.play_mp3('sounds/a42.mp3')
-                self.showing_image_show()
+
+                if red + green + blue > 1:
+                    self.play_mp3("sounds/boom.mp3")
+                    self.raise_error("Coefficients Sum must be <= 1, Baaaka!")
+
+                else:
+                    self.play_mp3("sounds/button.mp3")
+                    self.loading()
+                    self.play_mp3('sounds/a41.mp3')
+                    self.showing_image = f"assets/output.{self.file_name.split('.')[-1]}"
+                    img.rgb_to_gray_pixel_processing(self.file_name, self.showing_image, red, green, blue)
+                    self.play_mp3('sounds/a42.mp3')
+                    self.showing_image_show()
+                    
             else: self.play_mp3("sounds/baa.mp3")
 
         else:
