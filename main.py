@@ -443,22 +443,26 @@ class KawaīFotoShoppu(QMainWindow):
 
     def close_click(self, event):
 
-        self.play_mp3("sounds/baa.mp3")
+        if self.showing_image:
+            self.play_mp3("sounds/baa.mp3")
 
-        if self.aspect_ratio != 16/9:
-            self.upload_label.setScaledContents(True)
+            if self.aspect_ratio != 16/9:
+                self.upload_label.setScaledContents(True)
 
-        self.showing_image = ""
-        upload_pixmap = QPixmap('assets/upload.png').scaled(self.scale(1027, 'w'), self.scale(806, 'h'), Qt.KeepAspectRatio, Qt.SmoothTransformation)
-        self.upload_label.setPixmap(upload_pixmap)
-        self.upload_label.setStyleSheet(f"""
-            QLabel{{
-                background-color: #dd91b9;
-                border: 0px solid #f1d3e3;
-                border-radius: {self.scale(23, 'h')}px;
-            }}
-        """)
-        self.close_label.close()
+            self.showing_image = ""
+            upload_pixmap = QPixmap('assets/upload.png').scaled(self.scale(1027, 'w'), self.scale(806, 'h'), Qt.KeepAspectRatio, Qt.SmoothTransformation)
+            self.upload_label.setPixmap(upload_pixmap)
+            self.upload_label.setStyleSheet(f"""
+                QLabel{{
+                    background-color: #dd91b9;
+                    border: 0px solid #f1d3e3;
+                    border-radius: {self.scale(23, 'h')}px;
+                }}
+            """)
+            self.close_label.close()
+        else:
+            self.play_mp3("sounds/boom.mp3")
+            self.raise_error("No Image to Clear, no baaaka!")
 
     def img_click(self, event):
         self.play_mp3("sounds/button.mp3")
