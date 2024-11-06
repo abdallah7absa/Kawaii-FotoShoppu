@@ -462,7 +462,7 @@ class KawaīFotoShoppu(QMainWindow):
             self.close_label.close()
         else:
             self.play_mp3("sounds/boom.mp3")
-            self.raise_error("No Image to Clear, no baaaka!")
+            self.raise_error("No Image to Remove, no baaaka!")
 
     def img_click(self, event):
         self.play_mp3("sounds/button.mp3")
