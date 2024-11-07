@@ -93,17 +93,25 @@ def gamma_correction(image_path, output_path, gamma):
     cv2.imwrite(output_path, gamma_corrected)
 
 def log_transform(image_path, output_path):
-    image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
-    c = 255 / (np.log(1 + np.max(image)))
-    log_image = c * (np.log(image + 1))
-    log_image = np.array(log_image, dtype = np.uint8)
+    image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)    
+    # Avoid divide by zero by adding a small constant (epsilon)
+    epsilon = 1e-5
+    image = image + epsilon
+    c = 255 / np.log(1 + np.max(image))
+    log_image = c * np.log(image + 1)
+    log_image = np.clip(log_image, 0, 255)
+    log_image = np.array(log_image, dtype=np.uint8)    
     cv2.imwrite(output_path, log_image)
 
-def inverse_log_transform(image_path, output_path):
+def inverse_log_transform(image_path, output_path)
     image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
-    c = 255 / (np.log(1 + np.max(image)))
+    # Avoid divide by zero by adding a small constant (epsilon)
+    epsilon = 1e-5
+    image = image + epsilon
+    c = 255 / np.log(1 + np.max(image))
     inverse_log_image = np.exp(image / c) - 1
-    inverse_log_image = np.array(inverse_log_image, dtype = np.uint8)
+    inverse_log_image = np.clip(inverse_log_image, 0, 255)
+    inverse_log_image = np.array(inverse_log_image, dtype=np.uint8)
     cv2.imwrite(output_path, inverse_log_image)
 
 def complement(image_path, output_path):
