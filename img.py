@@ -103,7 +103,7 @@ def log_transform(image_path, output_path):
     log_image = np.array(log_image, dtype=np.uint8)    
     cv2.imwrite(output_path, log_image)
 
-def inverse_log_transform(image_path, output_path)
+def inverse_log_transform(image_path, output_path):
     image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
     # Avoid divide by zero by adding a small constant (epsilon)
     epsilon = 1e-5
