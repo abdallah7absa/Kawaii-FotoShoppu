@@ -2,7 +2,7 @@ import sys
 from PyQt5.QtWidgets import QApplication, QLabel, QPushButton, QWidget, QDialog
 from PyQt5.QtGui import QPixmap, QMouseEvent
 from PyQt5.QtCore import Qt, QPoint
-import assets
+from theme import theme
 
 class Info(QDialog):
     def __init__(self):
@@ -11,7 +11,7 @@ class Info(QDialog):
 
     def initUI(self):
 
-        self.image_assets = assets.image_assets
+        self.image_assets = theme.image_assets
 
         self.setWindowTitle('Info')
         self.setFixedSize(970, 581)

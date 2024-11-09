@@ -364,7 +364,7 @@ class KawaīFotoShoppu(QMainWindow):
         options = QFileDialog.Options()
         options |= QFileDialog.ReadOnly
         old_filename = self.file_name
-        self.file_name, _ = QFileDialog.getOpenFileName(self, "Open File", "./test-images/", "All Files (*);;Text Files (*.txt);;Images (*.png *.jpg *.bmp)")
+        self.file_name, _ = QFileDialog.getOpenFileName(self, "Open File", "../test-images/", "All Files (*);;Text Files (*.txt);;Images (*.png *.jpg *.bmp)")
 
         if self.file_name:
 
