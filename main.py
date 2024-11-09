@@ -21,8 +21,6 @@ class KawaīFotoShoppu(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        # theme = theme.Theme()
-
         monitors = get_monitors()
         for monitor in monitors:
             self.monitor_width = monitor.width

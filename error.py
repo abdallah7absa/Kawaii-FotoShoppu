@@ -9,8 +9,6 @@ from theme import theme
 class ErrorWindow(QDialog):
     def __init__(self, parent=None):
         super().__init__()
-        
-        # self.theme = theme.Theme()
 
         self.offset = None
 
