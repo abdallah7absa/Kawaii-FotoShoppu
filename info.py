@@ -2,6 +2,7 @@ import sys
 from PyQt5.QtWidgets import QApplication, QLabel, QPushButton, QWidget, QDialog
 from PyQt5.QtGui import QPixmap, QMouseEvent
 from PyQt5.QtCore import Qt, QPoint
+import assets
 
 class Info(QDialog):
     def __init__(self):
@@ -9,6 +10,9 @@ class Info(QDialog):
         self.initUI()
 
     def initUI(self):
+
+        self.image_assets = assets.image_assets
+
         self.setWindowTitle('Info')
         self.setFixedSize(970, 581)
         self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint)
@@ -17,7 +21,7 @@ class Info(QDialog):
         self.centerWindow()
 
         self.image_label = QLabel(self)
-        self.image_label.setPixmap(QPixmap("assets/info.png").scaled(970, 581))
+        self.image_label.setPixmap(QPixmap(f"{self.image_assets}/info.png").scaled(970, 581))
         self.image_label.setGeometry(0, 0, 970, 581)
 
         self.close_button = QPushButton('x', self)

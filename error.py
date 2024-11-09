@@ -4,14 +4,18 @@ import random
 from PyQt5.QtWidgets import QApplication, QLabel, QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QFrame, QDialog
 from PyQt5.QtGui import QMovie, QFont, QMouseEvent, QIcon
 from PyQt5.QtCore import Qt, QPoint, QSize
+from theme import theme
 
 class ErrorWindow(QDialog):
     def __init__(self, parent=None):
         super().__init__()
         
+        # self.theme = theme.Theme()
+
         self.offset = None
 
-        self.gifs_folder = './gifs/'
+        self.gifs_folder = theme.gif_assets
+        self.image_assets = theme.image_assets
 
         self.outer_layout = QVBoxLayout(self)
         self.outer_layout.setContentsMargins(0, 0, 0, 0)
@@ -65,7 +69,7 @@ class ErrorWindow(QDialog):
         self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint)
         # self.setFixedSize(500, 400)
         self.setWindowTitle("Bakaaaaaaa!")
-        self.setWindowIcon(QIcon('assets/icon.png'))
+        self.setWindowIcon(QIcon(f'{self.image_assets}/icon.png'))
 
     def get_random_gif(self):
         self.gifs = [os.path.join(self.gifs_folder, f) for f in os.listdir(self.gifs_folder) if f.endswith('.gif')]

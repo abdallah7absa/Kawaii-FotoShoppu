@@ -15,11 +15,13 @@ from screeninfo import get_monitors
 import error
 from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent
 import info
-
+from theme import theme
 
 class KawaīFotoShoppu(QMainWindow):
     def __init__(self):
         super().__init__()
+
+        # theme = theme.Theme()
 
         monitors = get_monitors()
         for monitor in monitors:
@@ -28,16 +30,16 @@ class KawaīFotoShoppu(QMainWindow):
         self.aspect_ratio = self.monitor_width / self.monitor_height
 
         self.setWindowTitle("Kawaī foto shoppu")
-        self.setWindowIcon(QIcon('assets/icon.png'))
+        self.setWindowIcon(QIcon(f'{theme.image_assets}/icon.png'))
 
         self.showFullScreen()
 
-        cursor_image = QPixmap('assets/cursor.png')
+        cursor_image = QPixmap(f'{theme.image_assets}/cursor.png')
         custom_cursor = QCursor(cursor_image)
         QApplication.setOverrideCursor(custom_cursor)
 
         self.bg_player = QMediaPlayer()
-        mp3_url = QUrl.fromLocalFile("sounds/bg.mp3")
+        mp3_url = QUrl.fromLocalFile(f"{theme.sound_assets}/bg.mp3")
         content = QMediaContent(mp3_url)
         self.bg_player.setMedia(content)
         self.bg_player.play()
@@ -47,7 +49,7 @@ class KawaīFotoShoppu(QMainWindow):
         self.bg_label = QLabel(self)
         self.bg_label.setGeometry(0, 0, self.monitor_width, self.monitor_height)
 
-        bg_pixmap = QPixmap('assets/bg.png').scaled(self.monitor_width, self.monitor_height, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+        bg_pixmap = QPixmap(f'{theme.image_assets}/bg.png').scaled(self.monitor_width, self.monitor_height, Qt.KeepAspectRatio, Qt.SmoothTransformation)
 
         self.bg_label.setPixmap(bg_pixmap)
         self.bg_label.setScaledContents(True)
@@ -57,10 +59,10 @@ class KawaīFotoShoppu(QMainWindow):
         self.showing_image = ""
         self.current_filter = ""
 
-        central_widget = QWidget()
-        self.setCentralWidget(central_widget)
+        self.central_widget = QWidget()
+        self.setCentralWidget(self.central_widget)
 
-        main_layout = QHBoxLayout(central_widget)
+        main_layout = QHBoxLayout(self.central_widget)
 
         left_layout = QVBoxLayout()
         self.tree = QTreeWidget()
@@ -69,82 +71,6 @@ class KawaīFotoShoppu(QMainWindow):
 
         self.tree.setFixedSize(self.scale(550, 'w'), self.scale(1050, 'h'))
         left_layout.addWidget(self.tree)
-
-        self.tree.setStyleSheet(f"""
-            QTreeWidget {{
-                margin: {self.scale(50, 'h')}px;
-                background-color: #DD91B9;
-                color: #FFFFFF;
-                border: {self.scale(8, 'h')}px solid #f1d3e3;
-                border-radius: {self.scale(23, 'h')}px;
-                padding-top: {self.scale(150, 'h')}px;
-                padding-left: {self.scale(10, 'w')}px;
-            }}
-            QTreeWidget::item:hover {{
-                background-color: #ffffff;
-                color: #DD91B9;
-            }}
-            QScrollBar:vertical {{
-                background-color: #DD91B9;
-                width: {self.scale(20, 'w')}px;
-                margin: 0 {self.scale(9, 'h')}px {self.scale(25, 'w')}px 0;
-                border-radius: {self.scale(23, 'h')}px;
-            }}
-            QScrollBar::handle:vertical {{
-                background-color: #ffffff;
-                min-height: {self.scale(20, 'h')}px;
-                border-radius: {self.scale(23, 'h')}px;
-            }}
-            QScrollBar:horizontal {{
-                background-color: #DD91B9;
-                height: {self.scale(12, 'h')}px;
-                margin: 0px;
-                border-radius: {self.scale(23, 'h')}px;
-            }}
-            QScrollBar::handle:horizontal {{
-                background-color: #ffffff;
-                min-width: {self.scale(20, 'w')}px;
-                border-radius: {self.scale(23, 'h')}px;
-            }}
-            QScrollBar::add-line, QScrollBar::sub-line {{
-                width: 0px;
-                height: 0px;
-            }}
-            QScrollBar::up-arrow, QScrollBar::down-arrow, QScrollBar::left-arrow, QScrollBar::right-arrow {{
-                background: none;
-                width: 0;
-                height: 0;
-            }}
-            QTreeWidget::item {{
-                color: #FFFFFF;
-                padding: 1px;
-            }}
-            QTreeWidget::item:selected {{
-                background-color: #DD91B9;
-                color: #FFFFFF;
-                outline: none;
-            }}
-            QTreeWidget::item:selected:active {{
-                background-color: #DD91B9;
-                color: white;
-            }}
-            QTreeWidget::item:selected:!active {{
-                background-color: #DD91B9;
-                color: white;
-            }}
-            QTreeWidget::branch:has-children:!has-siblings:closed,
-            QTreeWidget::branch:closed:has-children:has-siblings {{
-                image: url(assets/right.png);
-                height: 20px;
-                width: 20px;
-            }}
-            QTreeWidget::branch:open:has-children:!has-siblings,
-            QTreeWidget::branch:open:has-children:has-siblings {{
-                image: url(assets/down.png);
-                height: 20px;
-                width: 20px;
-            }}
-        """)
 
         self.apply_shadow_effect(self.tree)
 
@@ -256,7 +182,7 @@ class KawaīFotoShoppu(QMainWindow):
 
         self.image_label = QLabel()
         self.image_label.setAlignment(Qt.AlignCenter)
-        pixmap = QPixmap("assets/img.jpg")
+        pixmap = QPixmap(f"{theme.image_assets}/img.jpg")
         self.image_label.setPixmap(pixmap.scaled(self.scale(400, 'w'), self.scale(400, 'h'), Qt.KeepAspectRatio, Qt.SmoothTransformation))
 
         right_layout.addWidget(self.image_label)
@@ -265,14 +191,14 @@ class KawaīFotoShoppu(QMainWindow):
 
         self.logo_label = QLabel(self)
         self.logo_label.setGeometry(self.scale(90, 'w'), self.scale(90, 'h'), self.scale(383, 'w'), self.scale(101, 'h'))
-        logo_pixmap = QPixmap('assets/logo2.png').scaled(self.scale(383, 'w'), self.scale(101, 'h'), Qt.KeepAspectRatio, Qt.SmoothTransformation)
+        logo_pixmap = QPixmap(f'{theme.image_assets}/logo2.png').scaled(self.scale(383, 'w'), self.scale(101, 'h'), Qt.KeepAspectRatio, Qt.SmoothTransformation)
         self.logo_label.setPixmap(logo_pixmap)
         self.logo_label.setScaledContents(True)
         self.logo_label.show()
 
         self.upload_label = QLabel(self)
         self.upload_label.setGeometry(self.scale(705, 'w'), self.scale(95, 'h'), self.scale(1027, 'w'), self.scale(806, 'h'))
-        upload_pixmap = QPixmap('assets/upload.png').scaled(self.scale(1027, 'w'), self.scale(806, 'h'), Qt.KeepAspectRatio, Qt.SmoothTransformation)
+        upload_pixmap = QPixmap(f'{theme.image_assets}/upload.png').scaled(self.scale(1027, 'w'), self.scale(806, 'h'), Qt.KeepAspectRatio, Qt.SmoothTransformation)
         self.upload_label.setAlignment(Qt.AlignCenter)
         self.upload_label.setPixmap(upload_pixmap)
         if self.aspect_ratio != 16/9:
@@ -281,60 +207,28 @@ class KawaīFotoShoppu(QMainWindow):
         self.upload_label.mousePressEvent = self.img_click
         self.upload_label.setStyleSheet(f"""
             QLabel{{
-                background-color: #dd91b9;
+                background-color: {theme.main_color};
                 border-radius: {self.scale(23, 'h')}px;
             }}
         """)
 
         self.apply_button = QPushButton("Export", self)
         self.apply_button.setGeometry(self.scale(709, 'w'), self.scale(914, 'h'), self.scale(225, 'w'), self.scale(81, 'h'))
-        self.apply_button.setStyleSheet(f"""
-            QPushButton{{background-color: #DD91B9;
-                        color: white;
-                        font-size: {self.scale(25, 'w')}px;
-                        font-weight: bold;
-                        border: {self.scale(8, 'h')}px solid #f1d3e3;
-                        border-radius: {self.scale(23, 'h')}px;}}
-            QPushButton:hover {{
-                background-color: #e5a1c1;
-            }}
-        """)
+  
         self.apply_button.show()
         self.apply_button.clicked.connect(self.export)
 
 
         self.show_figure_button = QPushButton("Show Figure", self)
         self.show_figure_button.setGeometry(self.scale(971, 'w'), self.scale(914, 'h'), self.scale(500, 'w'), self.scale(81, 'h'))
-        self.show_figure_button.setStyleSheet(f"""
-            QPushButton {{background-color: #DD91B9;
-                        color: white;
-                        font-size: {self.scale(25, 'w')}px;
-                        font-weight: bold;
-                        border: {self.scale(8, 'h')}px solid #f1d3e3;
-                        border-radius: {self.scale(23, 'h')}px;}}
-            QPushButton:hover {{
-                background-color: #e5a1c1;
-            }}
-        """)
+
         self.show_figure_button.show()
         self.show_figure_button.clicked.connect(self.figure)
 
 
         self.clear_button = QPushButton("Clear", self)
         self.clear_button.setGeometry(self.scale(1507, 'w'), self.scale(914, 'h'), self.scale(225, 'w'), self.scale(81, 'h'))
-        self.clear_button.setStyleSheet(f"""
-            QPushButton {{
-                background-color: #983569;
-                color: white;
-                font-size: {self.scale(25, 'w')}px;
-                font-weight: bold;
-                /*border: {self.scale(8, 'h')}px solid #f1d3e3;*/
-                border-radius: {self.scale(23, 'h')}px;
-            }}
-            QPushButton:hover {{
-                background-color: #a93b74;
-            }}
-        """)
+
         self.clear_button.show()
         self.clear_button.clicked.connect(self.clear)
 
@@ -345,14 +239,14 @@ class KawaīFotoShoppu(QMainWindow):
 
         self.close_label = QLabel(self)
         self.close_label.setGeometry(self.scale(1650, 'w'), self.scale(123, 'h'), self.scale(60, 'w'), self.scale(60, 'h'))
-        close_pixmap = QPixmap('assets/close.png').scaled(self.scale(60, 'w'), self.scale(60, 'h'), Qt.KeepAspectRatio, Qt.SmoothTransformation)
+        close_pixmap = QPixmap(f'{theme.image_assets}/close.png').scaled(self.scale(60, 'w'), self.scale(60, 'h'), Qt.KeepAspectRatio, Qt.SmoothTransformation)
         self.close_label.setPixmap(close_pixmap)
         self.close_label.setScaledContents(True)
         self.close_label.mousePressEvent = self.close_click
 
         self.info_label = QLabel(self)
         self.info_label.setGeometry(self.scale(435, 'w'), self.scale(951, 'h'), self.scale(40, 'w'), self.scale(40, 'h'))
-        info_pixmap = QPixmap('assets/info_button.png').scaled(self.scale(40, 'w'), self.scale(40, 'h'), Qt.KeepAspectRatio, Qt.SmoothTransformation)
+        info_pixmap = QPixmap(f'{theme.image_assets}/info_button.png').scaled(self.scale(40, 'w'), self.scale(40, 'h'), Qt.KeepAspectRatio, Qt.SmoothTransformation)
         self.info_label.setPixmap(info_pixmap)
         self.info_label.setScaledContents(True)
         self.info_label.show()
@@ -364,17 +258,20 @@ class KawaīFotoShoppu(QMainWindow):
         self.timer.setInterval(1000//fps)
         self.timer.start()
 
+        self.update_theme()
+
+
     def info_click(self, event):
-        self.play_mp3("sounds/button.mp3")
+        self.play_mp3(f"{theme.sound_assets}/button.mp3")
         info_window = info.Info()
-        if not info_window.exec_(): self.play_mp3("sounds/baa.mp3")
+        if not info_window.exec_(): self.play_mp3(f"{theme.sound_assets}/baa.mp3")
 
 
 
 
     def export(self, event):
         if self.showing_image:
-            self.play_mp3("sounds/button.mp3")
+            self.play_mp3(f"{theme.sound_assets}/button.mp3")
             if isinstance(self.showing_image, str):
                 image = QPixmap(self.showing_image).toImage()
             elif isinstance(self.showing_image, QImage):
@@ -401,12 +298,12 @@ class KawaīFotoShoppu(QMainWindow):
                 if not image.save(file_path, file_extension):
                     self.raise_error("Failed to save the image.")
         else:
-            self.play_mp3("sounds/boom.mp3")
+            self.play_mp3(f"{theme.sound_assets}/boom.mp3")
             self.raise_error("No Image to Export, no baaaka!")
 
     def figure(self, event):
         if self.showing_image:
-            self.play_mp3("sounds/figure.mp3")
+            self.play_mp3(f"{theme.sound_assets}/figure.mp3")
             image = cv2.imread(self.showing_image)
             if (self.current_filter):
                 window_name = f"figure_{self.showing_image.split("/")[-1].split('.')[0]}_{self.current_filter}"
@@ -415,22 +312,22 @@ class KawaīFotoShoppu(QMainWindow):
             cv2.namedWindow(window_name)
             cv2.imshow(window_name, image)
         else:
-            self.play_mp3("sounds/boom.mp3")
+            self.play_mp3(f"{theme.sound_assets}/boom.mp3")
             self.raise_error("No Image to Show, no baaaka!")
 
     def clear(self, event):
         if(self.showing_image):
             if self.current_filter == "":
-                self.play_mp3("sounds/boom.mp3")
+                self.play_mp3(f"{theme.sound_assets}/boom.mp3")
                 self.raise_error("No Filter to clear, Baaaka!")
-            else: self.play_mp3("sounds/clear.mp3")
+            else: self.play_mp3(f"{theme.sound_assets}/clear.mp3")
             self.showing_image = self.file_name
             upload_pixmap = QPixmap(self.file_name).scaled(self.scale(1027, 'w'), self.scale(806, 'h'), Qt.KeepAspectRatio, Qt.SmoothTransformation)
             self.upload_label.setPixmap(upload_pixmap)
             self.upload_label.setStyleSheet(f"""
                 QLabel{{
-                    background-color: #dd91b9;
-                    border: {self.scale(8, 'h')}px solid #f1d3e3;
+                    background-color: {theme.main_color};
+                    border: {self.scale(8, 'h')}px solid {theme.border_color};
                     border-radius: {self.scale(23, 'h')}px;
                 }}
             """)
@@ -438,34 +335,34 @@ class KawaīFotoShoppu(QMainWindow):
             self.current_filter = ""
 
         else:
-            self.play_mp3("sounds/boom.mp3")
+            self.play_mp3(f"{theme.sound_assets}/boom.mp3")
             self.raise_error("No Image to clear, Baaaka!")
 
     def close_click(self, event):
 
         if self.showing_image:
-            self.play_mp3("sounds/baa.mp3")
+            self.play_mp3(f"{theme.sound_assets}/baa.mp3")
 
             if self.aspect_ratio != 16/9:
                 self.upload_label.setScaledContents(True)
 
             self.showing_image = ""
-            upload_pixmap = QPixmap('assets/upload.png').scaled(self.scale(1027, 'w'), self.scale(806, 'h'), Qt.KeepAspectRatio, Qt.SmoothTransformation)
+            upload_pixmap = QPixmap(f'{theme.image_assets}/upload.png').scaled(self.scale(1027, 'w'), self.scale(806, 'h'), Qt.KeepAspectRatio, Qt.SmoothTransformation)
             self.upload_label.setPixmap(upload_pixmap)
             self.upload_label.setStyleSheet(f"""
                 QLabel{{
-                    background-color: #dd91b9;
-                    border: 0px solid #f1d3e3;
+                    background-color: {theme.main_color};
+                    border: 0px solid {theme.border_color};
                     border-radius: {self.scale(23, 'h')}px;
                 }}
             """)
             self.close_label.close()
         else:
-            self.play_mp3("sounds/boom.mp3")
+            self.play_mp3(f"{theme.sound_assets}/boom.mp3")
             self.raise_error("No Image to Remove, no baaaka!")
 
     def img_click(self, event):
-        self.play_mp3("sounds/button.mp3")
+        self.play_mp3(f"{theme.sound_assets}/button.mp3")
         options = QFileDialog.Options()
         options |= QFileDialog.ReadOnly
         old_filename = self.file_name
@@ -481,15 +378,15 @@ class KawaīFotoShoppu(QMainWindow):
             self.upload_label.setPixmap(upload_pixmap)
             self.upload_label.setStyleSheet(f"""
                 QLabel{{
-                    background-color: #dd91b9;
-                    border: {self.scale(8, 'h')}px solid #f1d3e3;
+                    background-color: {theme.main_color};
+                    border: {self.scale(8, 'h')}px solid {theme.border_color};
                     border-radius: {self.scale(23, 'h')}px;
                 }}
             """)
             self.close_label.show()
-            self.play_mp3("sounds/waku.mp3")
+            self.play_mp3(f"{theme.sound_assets}/waku.mp3")
         else:
-            self.play_mp3("sounds/amongus.mp3")
+            self.play_mp3(f"{theme.sound_assets}/amongus.mp3")
             self.file_name = old_filename
             self.raise_error("no image selected, no baaaaaka!")
 
@@ -499,11 +396,11 @@ class KawaīFotoShoppu(QMainWindow):
 
     def loading(self):
         self.close_label.close()
-        upload_pixmap = QPixmap('assets/loading.png').scaled(self.scale(1027, 'w'), self.scale(806, 'h'), Qt.KeepAspectRatio, Qt.SmoothTransformation)
+        upload_pixmap = QPixmap(f'{theme.image_assets}/loading.png').scaled(self.scale(1027, 'w'), self.scale(806, 'h'), Qt.KeepAspectRatio, Qt.SmoothTransformation)
         self.upload_label.setPixmap(upload_pixmap)
         self.upload_label.setStyleSheet(f"""
             QLabel{{
-                background-color: #dd91b9;
+                background-color: {theme.main_color};
                 border-radius: {self.scale(23, 'h')}px;
             }}
         """)
@@ -515,8 +412,8 @@ class KawaīFotoShoppu(QMainWindow):
         self.upload_label.setPixmap(upload_pixmap)
         self.upload_label.setStyleSheet(f"""
             QLabel{{
-                background-color: #dd91b9;
-                border: {self.scale(8, 'h')}px solid #f1d3e3;
+                background-color: {theme.main_color};
+                border: {self.scale(8, 'h')}px solid {theme.border_color};
                 border-radius: {self.scale(23, 'h')}px;
             }}
         """)
@@ -524,7 +421,7 @@ class KawaīFotoShoppu(QMainWindow):
     def plot_histogram(self, title, histogram, file_name):
         plt.figure()
         plt.title(title)
-        plt.bar(np.arange(len(histogram)), histogram, width=1, color="#dd91b9")
+        plt.bar(np.arange(len(histogram)), histogram, width = 1, color = theme.main_color)
         plt.savefig(file_name)
         plt.close()
 
@@ -532,7 +429,7 @@ class KawaīFotoShoppu(QMainWindow):
 
         if (item.text(0) in self.roots):
 
-                self.play_mp3("sounds/button.mp3")
+                self.play_mp3(f"{theme.sound_assets}/button.mp3")
 
                 if item.isExpanded():
                     item.setExpanded(False)
@@ -583,7 +480,7 @@ class KawaīFotoShoppu(QMainWindow):
     def raise_error(self, message):
         error_window = error.ErrorWindow(self)
         error_window.error_message.setText(message)
-        if not error_window.exec_(): self.play_mp3("sounds/baa.mp3")
+        if not error_window.exec_(): self.play_mp3(f"{theme.sound_assets}/baa.mp3")
 
     def play_mp3(self, path):
         mp3_url = QUrl.fromLocalFile(path)
@@ -604,7 +501,7 @@ class KawaīFotoShoppu(QMainWindow):
 
         if self.showing_image:
             
-            self.play_mp3("sounds/button.mp3")
+            self.play_mp3(f"{theme.sound_assets}/button.mp3")
 
             self.current_filter = "rgb-to-binary"
 
@@ -617,30 +514,30 @@ class KawaīFotoShoppu(QMainWindow):
                 red, green, blue, threshold = dialog.get_coefficients()
 
                 if red + green + blue > 1:
-                    self.play_mp3("sounds/boom.mp3")
+                    self.play_mp3(f"{theme.sound_assets}/boom.mp3")
                     self.raise_error("Coefficients Sum must be <= 1, Baaaka!")
 
                 else:
-                    self.play_mp3("sounds/button.mp3")
+                    self.play_mp3(f"{theme.sound_assets}/button.mp3")
                     self.loading()
-                    self.play_mp3('sounds/a41.mp3')
-                    self.showing_image = f"assets/output.{self.file_name.split('.')[-1]}"
+                    self.play_mp3(f'{theme.sound_assets}/a41.mp3')
+                    self.showing_image = f"{theme.image_assets}/output.{self.file_name.split('.')[-1]}"
                     img.rgb_to_binary_pixel_processing(self.file_name, self.showing_image, red, green, blue, threshold)
-                    self.play_mp3('sounds/a42.mp3')
+                    self.play_mp3(f'{theme.sound_assets}/a42.mp3')
                     self.showing_image_show()
 
-            else: self.play_mp3("sounds/baa.mp3")
+            else: self.play_mp3(f"{theme.sound_assets}/baa.mp3")
 
         else:
 
-            self.play_mp3("sounds/boom.mp3")
+            self.play_mp3(f"{theme.sound_assets}/boom.mp3")
             self.raise_error("No Image to Apply Filter on, Baaaka!")
 
     def rgb_to_gray(self):
 
         if self.showing_image:
 
-            self.play_mp3("sounds/button.mp3")
+            self.play_mp3(f"{theme.sound_assets}/button.mp3")
 
             self.current_filter = "rgb-to-gray"
 
@@ -656,30 +553,30 @@ class KawaīFotoShoppu(QMainWindow):
                 red, green, blue, _ = dialog.get_coefficients()
 
                 if red + green + blue > 1:
-                    self.play_mp3("sounds/boom.mp3")
+                    self.play_mp3(f"{theme.sound_assets}/boom.mp3")
                     self.raise_error("Coefficients Sum must be <= 1, Baaaka!")
 
                 else:
-                    self.play_mp3("sounds/button.mp3")
+                    self.play_mp3(f"{theme.sound_assets}/button.mp3")
                     self.loading()
-                    self.play_mp3('sounds/a41.mp3')
-                    self.showing_image = f"assets/output.{self.file_name.split('.')[-1]}"
+                    self.play_mp3(f'{theme.sound_assets}/a41.mp3')
+                    self.showing_image = f"{theme.image_assets}/output.{self.file_name.split('.')[-1]}"
                     img.rgb_to_gray_pixel_processing(self.file_name, self.showing_image, red, green, blue)
-                    self.play_mp3('sounds/a42.mp3')
+                    self.play_mp3(f'{theme.sound_assets}/a42.mp3')
                     self.showing_image_show()
                     
-            else: self.play_mp3("sounds/baa.mp3")
+            else: self.play_mp3(f"{theme.sound_assets}/baa.mp3")
 
         else:
 
-            self.play_mp3("sounds/boom.mp3")
+            self.play_mp3(f"{theme.sound_assets}/boom.mp3")
             self.raise_error("No Image to Apply Filter on, Baaaka!")
 
     def apply_brightness(self, selection):
 
         if self.showing_image:
 
-            self.play_mp3("sounds/button.mp3")
+            self.play_mp3(f"{theme.sound_assets}/button.mp3")
 
             self.current_filter = f"{selection.split(' ')[0].lower()}-brighness"
 
@@ -694,35 +591,36 @@ class KawaīFotoShoppu(QMainWindow):
 
             if dialog.exec_():
 
-                self.play_mp3("sounds/button.mp3")
+                self.play_mp3(f"{theme.sound_assets}/button.mp3")
 
                 self.loading()
 
                 brightness_value = dialog.get_coefficients()
 
                 if brightness_value == 0:
-                    self.raise_error("Can't Divide by Zero, no baaaka!")
                     self.showing_image_show()
+                    self.play_mp3(f'{theme.sound_assets}/boom.mp3')
+                    self.raise_error("Can't Divide by Zero, no baaaka!")
 
                 else:
-                    self.play_mp3('sounds/a41.mp3')
-                    self.showing_image = f"assets/output.{self.file_name.split('.')[-1]}"
+                    self.play_mp3(f'{theme.sound_assets}/a41.mp3')
+                    self.showing_image = f"{theme.image_assets}/output.{self.file_name.split('.')[-1]}"
                     img.brightness_operations(self.file_name, self.showing_image, selection, brightness_value)
                     self.stop_mp3()
-                    self.play_mp3('sounds/a42.mp3')
+                    self.play_mp3(f'{theme.sound_assets}/a42.mp3')
                     self.showing_image_show()
-            else: self.play_mp3("sounds/baa.mp3")
+            else: self.play_mp3(f"{theme.sound_assets}/baa.mp3")
 
         else:
 
-            self.play_mp3("sounds/boom.mp3")
+            self.play_mp3(f"{theme.sound_assets}/boom.mp3")
             self.raise_error("No Image to Apply Filter on, Baaaka!")
 
     def gamma_correction(self):
 
         if self.showing_image:
 
-            self.play_mp3("sounds/button.mp3")
+            self.play_mp3(f"{theme.sound_assets}/button.mp3")
 
             self.current_filter = "gamma-correction"
 
@@ -732,72 +630,72 @@ class KawaīFotoShoppu(QMainWindow):
 
             if dialog.exec_():
 
-                self.play_mp3("sounds/button.mp3")
+                self.play_mp3(f"{theme.sound_assets}/button.mp3")
 
                 self.loading()
-                self.play_mp3('sounds/a41.mp3')
+                self.play_mp3(f'{theme.sound_assets}/a41.mp3')
                 gamma = dialog.get_coefficients()
 
-                self.showing_image = f"assets/output.{self.file_name.split('.')[-1]}"
+                self.showing_image = f"{theme.image_assets}/output.{self.file_name.split('.')[-1]}"
                 img.gamma_correction(self.file_name, self.showing_image, gamma)
-                self.play_mp3('sounds/a42.mp3')
+                self.play_mp3(f'{theme.sound_assets}/a42.mp3')
                 self.showing_image_show()
-            else: self.play_mp3("sounds/baa.mp3")
+            else: self.play_mp3(f"{theme.sound_assets}/baa.mp3")
         else:
-            self.play_mp3("sounds/boom.mp3")
+            self.play_mp3(f"{theme.sound_assets}/boom.mp3")
             self.raise_error("No Image to Apply Filter on, Baaaka!")
 
     def apply_correction(self, selection):
 
         if self.showing_image:
 
-            self.play_mp3("sounds/button.mp3")
+            self.play_mp3(f"{theme.sound_assets}/button.mp3")
 
             self.current_filter = f"{selection.lower()}"
 
             self.loading()
-            self.play_mp3('sounds/a41.mp3')
-            self.showing_image = f"assets/output.{self.file_name.split('.')[-1]}"
+            self.play_mp3(f'{theme.sound_assets}/a41.mp3')
+            self.showing_image = f"{theme.image_assets}/output.{self.file_name.split('.')[-1]}"
             if(selection == "Log Corrections"):
                 img.log_transform(self.file_name, self.showing_image)
             elif(selection == "Inverse Log"):
                 img.inverse_log_transform(self.file_name, self.showing_image)
             elif(selection == "Complement"):
                 img.complement(self.file_name, self.showing_image)
-            self.play_mp3('sounds/a42.mp3')
+            self.play_mp3(f'{theme.sound_assets}/a42.mp3')
             self.showing_image_show()
         else:
-            self.play_mp3("sounds/boom.mp3")
+            self.play_mp3(f"{theme.sound_assets}/boom.mp3")
             self.raise_error("No Image to Apply Filter on, Baaaka!")
 
     def original_histogram(self):
 
         if self.showing_image:
 
-            self.play_mp3("sounds/button.mp3")
+            self.play_mp3(f"{theme.sound_assets}/button.mp3")
 
             original_histogram = img.calculate_histogram(self.file_name)
 
-            plot_file_name = f"assets/histogram_plot.{self.file_name.split('.')[-1]}"
+            plot_file_name = f"{theme.image_assets}/histogram_plot.{self.file_name.split('.')[-1]}"
 
             self.plot_histogram("Original Histogram", original_histogram, plot_file_name)
 
             histogram_image = cv2.imread(plot_file_name)
 
-            self.play_mp3('sounds/a42.mp3')
+            self.play_mp3(f'{theme.sound_assets}/a42.mp3')
 
             cv2.imshow("Original Histogram", histogram_image)
 
         else:
 
-            self.play_mp3("sounds/boom.mp3")
+            self.play_mp3(f"{theme.sound_assets}/boom.mp3")
             self.raise_error("No Image to Apply Filter on, Baaaka!")
 
     def stretched_histogram(self):
 
         if self.showing_image:
 
-            self.play_mp3("sounds/button.mp3")
+            self.play_mp3(f"{theme.sound_assets}/button.mp3")
 
             self.current_filter = "stretched-histogram"
 
@@ -807,65 +705,219 @@ class KawaīFotoShoppu(QMainWindow):
 
             if dialog.exec_():
                 
-                self.play_mp3("sounds/button.mp3")
+                self.play_mp3(f"{theme.sound_assets}/button.mp3")
 
                 self.loading()
-                self.play_mp3('sounds/a41.mp3')
+                self.play_mp3(f'{theme.sound_assets}/a41.mp3')
                 l, r = dialog.get_coefficients()
 
-                self.showing_image = f"assets/output.{self.file_name.split('.')[-1]}"
+                self.showing_image = f"{theme.image_assets}/output.{self.file_name.split('.')[-1]}"
 
                 img.contrast_stretching(self.file_name, l, r, self.showing_image)
 
                 stretched_histogram = img.calculate_histogram(self.showing_image)
 
-                plot_file_name = f"assets/histogram_plot.{self.file_name.split('.')[-1]}"
+                plot_file_name = f"{theme.image_assets}/histogram_plot.{self.file_name.split('.')[-1]}"
 
                 self.plot_histogram("Stretched Histogram", stretched_histogram, plot_file_name)
 
                 stretched_histogram_image = cv2.imread(plot_file_name)
 
                 cv2.imshow("Stretched Histogram", stretched_histogram_image)
-                self.play_mp3('sounds/a42.mp3')
+                self.play_mp3(f'{theme.sound_assets}/a42.mp3')
                 self.showing_image_show()
 
-            else: self.play_mp3("sounds/baa.mp3")
+            else: self.play_mp3(f"{theme.sound_assets}/baa.mp3")
 
         else:
 
-            self.play_mp3("sounds/boom.mp3")
+            self.play_mp3(f"{theme.sound_assets}/boom.mp3")
             self.raise_error("No Image to Apply Filter on, Baaaka!")
 
     def equalized_histogram(self):
 
         if self.showing_image:
 
-            self.play_mp3("sounds/button.mp3")
+            self.play_mp3(f"{theme.sound_assets}/button.mp3")
 
             self.current_filter = "equalized-histogram"
 
             self.loading()
-            self.play_mp3('sounds/a41.mp3')
-            self.showing_image = f"assets/output.{self.file_name.split('.')[-1]}"
+            self.play_mp3(f'{theme.sound_assets}/a41.mp3')
+            self.showing_image = f"{theme.image_assets}/output.{self.file_name.split('.')[-1]}"
 
             img.histogram_equalization(self.file_name, self.showing_image)
 
             equalized_histogram = img.calculate_histogram(self.showing_image)
 
-            plot_file_name = f"assets/histogram_plot.{self.file_name.split('.')[-1]}"
+            plot_file_name = f"{theme.image_assets}/histogram_plot.{self.file_name.split('.')[-1]}"
 
             self.plot_histogram("Equalized Histogram", equalized_histogram, plot_file_name)
 
             equalized_histogram_image = cv2.imread(plot_file_name)
 
             cv2.imshow("Equalized Histogram", equalized_histogram_image)
-            self.play_mp3('sounds/a42.mp3')
+            self.play_mp3(f'{theme.sound_assets}/a42.mp3')
             self.showing_image_show()
 
         else:
 
-            self.play_mp3("sounds/boom.mp3")
+            self.play_mp3(f"{theme.sound_assets}/boom.mp3")
             self.raise_error("No Image to Apply Filter on, Baaaka!")
+
+    def update_assets_file(self):
+        new_content = f"""
+image_assets = "{theme.image_assets}"
+sound_assets = "{theme.sound_assets}"
+gif_assets = "{theme.gif_assets}"
+main_color = "{theme.main_color}"
+main_color_darken = "{theme.main_color_darken}"
+fg_color = "{theme.fg_color}"
+border_color = "{theme.border_color}"
+main_hover = "{theme.main_hover}"
+main_darken_hover = "{theme.main_darken_hover}"
+"""
+        with open('theme.py', 'w') as file:
+            file.write(new_content)
+
+    def update_theme(self):
+        mp3_url = QUrl.fromLocalFile(f"{theme.sound_assets}/bg.mp3")
+        content = QMediaContent(mp3_url)
+        self.bg_player.setMedia(content)
+        self.bg_player.play()
+
+        if self.showing_image:
+            self.showing_image_show()
+        else:
+            upload_pixmap = QPixmap(f'{theme.image_assets}/upload.png').scaled(self.scale(1027, 'w'), self.scale(806, 'h'), Qt.KeepAspectRatio, Qt.SmoothTransformation)
+            self.upload_label.setPixmap(upload_pixmap)
+            self.upload_label.setStyleSheet(f"""
+            QLabel{{
+                background-color: {theme.main_color};
+                border-radius: {self.scale(23, 'h')}px;
+            }}
+        """)
+        logo_pixmap = QPixmap(f'{theme.image_assets}/logo2.png').scaled(self.scale(383, 'w'), self.scale(101, 'h'), Qt.KeepAspectRatio, Qt.SmoothTransformation)
+        self.logo_label.setPixmap(logo_pixmap)
+
+        bg_pixmap = QPixmap(f'{theme.image_assets}/bg.png').scaled(self.monitor_width, self.monitor_height, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+        self.setWindowIcon(QIcon(f'{theme.image_assets}/icon.png'))
+
+        self.bg_label.setPixmap(bg_pixmap)
+        self.apply_button.setStyleSheet(f"""
+            QPushButton{{background-color: {theme.main_color};
+                        color: {theme.fg_color};
+                        font-size: {self.scale(25, 'w')}px;
+                        font-weight: bold;
+                        border: {self.scale(8, 'h')}px solid {theme.border_color};
+                        border-radius: {self.scale(23, 'h')}px;}}
+            QPushButton:hover {{
+                background-color: {theme.main_hover};
+            }}
+        """)
+        cursor_image = QPixmap(f'{theme.image_assets}/cursor.png')
+        custom_cursor = QCursor(cursor_image)
+        QApplication.setOverrideCursor(custom_cursor)
+        self.clear_button.setStyleSheet(f"""
+            QPushButton {{
+                background-color: {theme.main_color_darken};
+                color: {theme.fg_color};
+                font-size: {self.scale(25, 'w')}px;
+                font-weight: bold;
+                /*border: {self.scale(8, 'h')}px solid {theme.border_color};*/
+                border-radius: {self.scale(23, 'h')}px;
+            }}
+            QPushButton:hover {{
+                background-color: {theme.main_darken_hover};
+            }}
+        """)
+        self.show_figure_button.setStyleSheet(f"""
+            QPushButton {{background-color: {theme.main_color};
+                        color: {theme.fg_color};
+                        font-size: {self.scale(25, 'w')}px;
+                        font-weight: bold;
+                        border: {self.scale(8, 'h')}px solid {theme.border_color};
+                        border-radius: {self.scale(23, 'h')}px;}}
+            QPushButton:hover {{
+                background-color: {theme.main_hover};
+            }}
+        """)
+        self.tree.setStyleSheet(f"""
+            QTreeWidget {{
+                margin: {self.scale(50, 'h')}px;
+                background-color: {theme.main_color};
+                color: {theme.fg_color};
+                border: {self.scale(8, 'h')}px solid {theme.border_color};
+                border-radius: {self.scale(23, 'h')}px;
+                padding-top: {self.scale(150, 'h')}px;
+                padding-left: {self.scale(10, 'w')}px;
+            }}
+            QTreeWidget::item:hover {{
+                background-color: {theme.fg_color};
+                color: {theme.main_color};
+            }}
+            QScrollBar:vertical {{
+                background-color: {theme.main_color};
+                width: {self.scale(20, 'w')}px;
+                margin: 0 {self.scale(9, 'h')}px {self.scale(25, 'w')}px 0;
+                border-radius: {self.scale(23, 'h')}px;
+            }}
+            QScrollBar::handle:vertical {{
+                background-color: {theme.fg_color};
+                min-height: {self.scale(20, 'h')}px;
+                border-radius: {self.scale(23, 'h')}px;
+            }}
+            QScrollBar:horizontal {{
+                background-color: {theme.main_color};
+                height: {self.scale(12, 'h')}px;
+                margin: 0px;
+                border-radius: {self.scale(23, 'h')}px;
+            }}
+            QScrollBar::handle:horizontal {{
+                background-color: {theme.fg_color};
+                min-width: {self.scale(20, 'w')}px;
+                border-radius: {self.scale(23, 'h')}px;
+            }}
+            QScrollBar::add-line, QScrollBar::sub-line {{
+                width: 0px;
+                height: 0px;
+            }}
+            QScrollBar::up-arrow, QScrollBar::down-arrow, QScrollBar::left-arrow, QScrollBar::right-arrow {{
+                background: none;
+                width: 0;
+                height: 0;
+            }}
+            QTreeWidget::item {{
+                color: {theme.fg_color};
+                padding: 1px;
+            }}
+            QTreeWidget::item:selected {{
+                background-color: {theme.main_color};
+                color: {theme.fg_color};
+                outline: none;
+            }}
+            QTreeWidget::item:selected:active {{
+                background-color: {theme.main_color};
+                color: {theme.fg_color};
+            }}
+            QTreeWidget::item:selected:!active {{
+                background-color: {theme.main_color};
+                color: {theme.fg_color};
+            }}
+            QTreeWidget::branch:has-children:!has-siblings:closed,
+            QTreeWidget::branch:closed:has-children:has-siblings {{
+                image: url({theme.image_assets}/right.png);
+                height: 20px;
+                width: 20px;
+            }}
+            QTreeWidget::branch:open:has-children:!has-siblings,
+            QTreeWidget::branch:open:has-children:has-siblings {{
+                image: url({theme.image_assets}/down.png);
+                height: 20px;
+                width: 20px;
+            }}
+        """)
+
 
     """   KawaīM —— o(*￣▽￣*)ブ   """
     def keyPressEvent(self, event):
@@ -884,19 +936,19 @@ class KawaīFotoShoppu(QMainWindow):
         elif event.key() == Qt.Key_R:
             self.close_click(self)
         elif event.key() == Qt.Key_V:
-            self.play_mp3("sounds/button.mp3")
+            self.play_mp3(f"{theme.sound_assets}/button.mp3")
             self.switch_item(self.colors_conversions_root)
         elif event.key() == Qt.Key_P:
-            self.play_mp3("sounds/button.mp3")
+            self.play_mp3(f"{theme.sound_assets}/button.mp3")
             self.switch_item(self.point_processing_root)
         elif event.key() == Qt.Key_B:
-            self.play_mp3("sounds/button.mp3")
+            self.play_mp3(f"{theme.sound_assets}/button.mp3")
             self.switch_item(self.brightness_root)
         elif event.key() == Qt.Key_N:
-            self.play_mp3("sounds/button.mp3")
+            self.play_mp3(f"{theme.sound_assets}/button.mp3")
             self.switch_item(self.corrections_root)
         elif event.key() == Qt.Key_H:
-            self.play_mp3("sounds/button.mp3")
+            self.play_mp3(f"{theme.sound_assets}/button.mp3")
             self.switch_item(self.histogram_processing_root)
         elif event.key() == Qt.Key_F1:
             self.rgb_to_binary()
@@ -924,6 +976,12 @@ class KawaīFotoShoppu(QMainWindow):
             self.original_histogram()
         elif event.key() == Qt.Key_F12:
             self.stretched_histogram()
+        elif event.key() == Qt.Key_L:
+            theme.switch_to_theme_1()
+            self.update_theme()
+        elif event.key() == Qt.Key_K:
+            theme.switch_to_theme_2()
+            self.update_theme()
         if event.key() == Qt.Key_1:
             self.equalized_histogram()
         elif event.modifiers() & Qt.ControlModifier:

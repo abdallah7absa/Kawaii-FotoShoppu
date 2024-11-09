@@ -5,17 +5,17 @@ import numpy as np
 def rgb_to_gray_pixel_processing(image_path, output_path, r1, r2, r3):
 
     image = cv2.imread(image_path)
-    
+
     height, width, _ = image.shape
-    
+
     gray_image = np.zeros((height, width), dtype=np.uint8)
-    
+
     for y in range(height):
         for x in range(width):
             r, g, b = image[y, x]
             gray = int(r1 * r + r2 * g + r3 * b)
             gray_image[y, x] = gray
-    
+
     # cv2.imshow('gray Image', gray_image)
 
     cv2.imwrite(output_path, gray_image)
