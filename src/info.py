@@ -26,7 +26,7 @@ class Info(QDialog):
 
         self.close_button = QPushButton('x', self)
         self.close_button.setGeometry(920, 10, 40, 40)
-        self.close_button.setStyleSheet("background-color: rgba(0, 0, 0, 0); color: black; border: none; font-size: 40px; font-weight: 50%;")
+        self.close_button.setStyleSheet(f"background-color: rgba(0, 0, 0, 0); color: {theme.close_info_color}; border: none; font-size: 40px; font-weight: 50%;")
         self.close_button.clicked.connect(self.close)
 
         self.dragging = False

@@ -6,13 +6,13 @@ import main
 import time
 from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent
 from PyQt5.QtCore import *
-import assets
+from theme import theme
 
 def show_splash_screen():
     app = QApplication(sys.argv)
 
-    image_assets = assets.image_assets
-    sound_assets = assets.sound_assets
+    image_assets = theme.image_assets
+    sound_assets = theme.sound_assets
 
     bg_player = QMediaPlayer()
     mp3_url = QUrl.fromLocalFile(f"{sound_assets}/windows.mp3")
@@ -29,6 +29,7 @@ def show_splash_screen():
     splash_x = (screen_geometry.width() - splash.width()) // 2
     splash_y = (screen_geometry.height() - splash.height()) // 2
     splash.setGeometry(QRect(splash_x, splash_y, splash.width(), splash.height()))
+
 
     splash.setWindowFlag(Qt.WindowStaysOnTopHint)
     splash.show()

@@ -19,7 +19,7 @@ class ErrorWindow(QDialog):
         self.outer_layout.setContentsMargins(0, 0, 0, 0)
         
         self.frame = QFrame(self)
-        self.frame.setStyleSheet("QFrame { background-color: #983569; border: 8px solid #652345; }")
+        self.frame.setStyleSheet(f"QFrame {{ background-color: {theme.error_bg_color}; border: 8px solid {theme.error_border_color}; }}")
         
         self.main_layout = QVBoxLayout(self.frame)
         
@@ -27,10 +27,9 @@ class ErrorWindow(QDialog):
         self.close_button.clicked.connect(self.close)
         self.close_button.setStyleSheet("QPushButton {"
                                    "border: none; "
-                                   "color: white; "
                                    "font-size: 50px; "
                                    "padding: 0px; "
-                                   "color: #f1d3e3"
+                                   f"color: {theme.close_error_color}"
                                    "}")
         
         self.top_layout = QHBoxLayout()
@@ -42,7 +41,7 @@ class ErrorWindow(QDialog):
         self.gif_label = QLabel(self)
         self.gif_label.setStyleSheet("""
             QLabel{
-                border: 0px solid #d6aec3;
+                border-width: 0;
                 padding: 15;
             }
             """)
@@ -56,7 +55,7 @@ class ErrorWindow(QDialog):
         self.font = QFont('Inter', 20)
         self.font.setBold(True)
         self.error_message.setFont(self.font)
-        self.error_message.setStyleSheet("color: white; background: none; padding: 20px; border: none;")  # Add padding around the message
+        self.error_message.setStyleSheet(f"color: {theme.error_message_color}; background: none; padding: 20px; border: none;")  # Add padding around the message
         self.error_message.setAlignment(Qt.AlignCenter)
         self.main_layout.addWidget(self.error_message, alignment=Qt.AlignCenter)
         

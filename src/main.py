@@ -32,24 +32,13 @@ class KawaīFotoShoppu(QMainWindow):
 
         self.showFullScreen()
 
-        cursor_image = QPixmap(f'{theme.image_assets}/cursor.png')
-        custom_cursor = QCursor(cursor_image)
-        QApplication.setOverrideCursor(custom_cursor)
-
         self.bg_player = QMediaPlayer()
-        mp3_url = QUrl.fromLocalFile(f"{theme.sound_assets}/bg.mp3")
-        content = QMediaContent(mp3_url)
-        self.bg_player.setMedia(content)
-        self.bg_player.play()
 
         self.player = QMediaPlayer()
 
         self.bg_label = QLabel(self)
         self.bg_label.setGeometry(0, 0, self.monitor_width, self.monitor_height)
 
-        bg_pixmap = QPixmap(f'{theme.image_assets}/bg.png').scaled(self.monitor_width, self.monitor_height, Qt.KeepAspectRatio, Qt.SmoothTransformation)
-
-        self.bg_label.setPixmap(bg_pixmap)
         self.bg_label.setScaledContents(True)
         self.bg_label.show()
 
@@ -189,44 +178,29 @@ class KawaīFotoShoppu(QMainWindow):
 
         self.logo_label = QLabel(self)
         self.logo_label.setGeometry(self.scale(90, 'w'), self.scale(90, 'h'), self.scale(383, 'w'), self.scale(101, 'h'))
-        logo_pixmap = QPixmap(f'{theme.image_assets}/logo2.png').scaled(self.scale(383, 'w'), self.scale(101, 'h'), Qt.KeepAspectRatio, Qt.SmoothTransformation)
-        self.logo_label.setPixmap(logo_pixmap)
         self.logo_label.setScaledContents(True)
         self.logo_label.show()
 
         self.upload_label = QLabel(self)
         self.upload_label.setGeometry(self.scale(705, 'w'), self.scale(95, 'h'), self.scale(1027, 'w'), self.scale(806, 'h'))
-        upload_pixmap = QPixmap(f'{theme.image_assets}/upload.png').scaled(self.scale(1027, 'w'), self.scale(806, 'h'), Qt.KeepAspectRatio, Qt.SmoothTransformation)
         self.upload_label.setAlignment(Qt.AlignCenter)
-        self.upload_label.setPixmap(upload_pixmap)
         if self.aspect_ratio != 16/9:
             self.upload_label.setScaledContents(True)
         self.upload_label.show()
         self.upload_label.mousePressEvent = self.img_click
-        self.upload_label.setStyleSheet(f"""
-            QLabel{{
-                background-color: {theme.main_color};
-                border-radius: {self.scale(23, 'h')}px;
-            }}
-        """)
 
         self.apply_button = QPushButton("Export", self)
         self.apply_button.setGeometry(self.scale(709, 'w'), self.scale(914, 'h'), self.scale(225, 'w'), self.scale(81, 'h'))
-  
         self.apply_button.show()
         self.apply_button.clicked.connect(self.export)
 
-
         self.show_figure_button = QPushButton("Show Figure", self)
         self.show_figure_button.setGeometry(self.scale(971, 'w'), self.scale(914, 'h'), self.scale(500, 'w'), self.scale(81, 'h'))
-
         self.show_figure_button.show()
         self.show_figure_button.clicked.connect(self.figure)
 
-
         self.clear_button = QPushButton("Clear", self)
         self.clear_button.setGeometry(self.scale(1507, 'w'), self.scale(914, 'h'), self.scale(225, 'w'), self.scale(81, 'h'))
-
         self.clear_button.show()
         self.clear_button.clicked.connect(self.clear)
 
@@ -264,9 +238,6 @@ class KawaīFotoShoppu(QMainWindow):
         info_window = info.Info()
         if not info_window.exec_(): self.play_mp3(f"{theme.sound_assets}/baa.mp3")
 
-
-
-
     def export(self, event):
         if self.showing_image:
             self.play_mp3(f"{theme.sound_assets}/button.mp3")
@@ -277,7 +248,7 @@ class KawaīFotoShoppu(QMainWindow):
             else:
                 print("Error: showing_image is not a valid image format.")
                 return
-            
+
             options = QFileDialog.Options()
             file_path, _ = QFileDialog.getSaveFileName(
                 None,
@@ -325,8 +296,8 @@ class KawaīFotoShoppu(QMainWindow):
             self.upload_label.setStyleSheet(f"""
                 QLabel{{
                     background-color: {theme.main_color};
-                    border: {self.scale(8, 'h')}px solid {theme.border_color};
-                    border-radius: {self.scale(23, 'h')}px;
+                    border: {self.scale(theme.border_width, 'h')}px solid {theme.border_color};
+                    border-radius: {self.scale(theme.border_radius, 'h')}px;
                 }}
             """)
             self.close_label.show()
@@ -351,7 +322,7 @@ class KawaīFotoShoppu(QMainWindow):
                 QLabel{{
                     background-color: {theme.main_color};
                     border: 0px solid {theme.border_color};
-                    border-radius: {self.scale(23, 'h')}px;
+                    border-radius: {self.scale(theme.border_radius, 'h')}px;
                 }}
             """)
             self.close_label.close()
@@ -377,8 +348,8 @@ class KawaīFotoShoppu(QMainWindow):
             self.upload_label.setStyleSheet(f"""
                 QLabel{{
                     background-color: {theme.main_color};
-                    border: {self.scale(8, 'h')}px solid {theme.border_color};
-                    border-radius: {self.scale(23, 'h')}px;
+                    border: {self.scale(theme.border_width, 'h')}px solid {theme.border_color};
+                    border-radius: {self.scale(theme.border_radius, 'h')}px;
                 }}
             """)
             self.close_label.show()
@@ -399,7 +370,7 @@ class KawaīFotoShoppu(QMainWindow):
         self.upload_label.setStyleSheet(f"""
             QLabel{{
                 background-color: {theme.main_color};
-                border-radius: {self.scale(23, 'h')}px;
+                border-radius: {self.scale(theme.border_radius, 'h')}px;
             }}
         """)
         QCoreApplication.processEvents()
@@ -411,8 +382,8 @@ class KawaīFotoShoppu(QMainWindow):
         self.upload_label.setStyleSheet(f"""
             QLabel{{
                 background-color: {theme.main_color};
-                border: {self.scale(8, 'h')}px solid {theme.border_color};
-                border-radius: {self.scale(23, 'h')}px;
+                border: {self.scale(theme.border_width, 'h')}px solid {theme.border_color};
+                border-radius: {self.scale(theme.border_radius, 'h')}px;
             }}
         """)
 
@@ -763,21 +734,6 @@ class KawaīFotoShoppu(QMainWindow):
             self.play_mp3(f"{theme.sound_assets}/boom.mp3")
             self.raise_error("No Image to Apply Filter on, Baaaka!")
 
-    def update_assets_file(self):
-        new_content = f"""
-image_assets = "{theme.image_assets}"
-sound_assets = "{theme.sound_assets}"
-gif_assets = "{theme.gif_assets}"
-main_color = "{theme.main_color}"
-main_color_darken = "{theme.main_color_darken}"
-fg_color = "{theme.fg_color}"
-border_color = "{theme.border_color}"
-main_hover = "{theme.main_hover}"
-main_darken_hover = "{theme.main_darken_hover}"
-"""
-        with open('theme.py', 'w') as file:
-            file.write(new_content)
-
     def update_theme(self):
         mp3_url = QUrl.fromLocalFile(f"{theme.sound_assets}/bg.mp3")
         content = QMediaContent(mp3_url)
@@ -792,7 +748,7 @@ main_darken_hover = "{theme.main_darken_hover}"
             self.upload_label.setStyleSheet(f"""
             QLabel{{
                 background-color: {theme.main_color};
-                border-radius: {self.scale(23, 'h')}px;
+                border-radius: {self.scale(theme.border_radius, 'h')}px;
             }}
         """)
         logo_pixmap = QPixmap(f'{theme.image_assets}/logo2.png').scaled(self.scale(383, 'w'), self.scale(101, 'h'), Qt.KeepAspectRatio, Qt.SmoothTransformation)
@@ -807,8 +763,8 @@ main_darken_hover = "{theme.main_darken_hover}"
                         color: {theme.fg_color};
                         font-size: {self.scale(25, 'w')}px;
                         font-weight: bold;
-                        border: {self.scale(8, 'h')}px solid {theme.border_color};
-                        border-radius: {self.scale(23, 'h')}px;}}
+                        border: {self.scale(theme.border_width, 'h')}px solid {theme.border_color};
+                        border-radius: {self.scale(theme.border_radius, 'h')}px;}}
             QPushButton:hover {{
                 background-color: {theme.main_hover};
             }}
@@ -822,8 +778,8 @@ main_darken_hover = "{theme.main_darken_hover}"
                 color: {theme.fg_color};
                 font-size: {self.scale(25, 'w')}px;
                 font-weight: bold;
-                /*border: {self.scale(8, 'h')}px solid {theme.border_color};*/
-                border-radius: {self.scale(23, 'h')}px;
+                /*border: {self.scale(theme.border_width, 'h')}px solid {theme.border_color};*/
+                border-radius: {self.scale(theme.border_radius, 'h')}px;
             }}
             QPushButton:hover {{
                 background-color: {theme.main_darken_hover};
@@ -834,8 +790,8 @@ main_darken_hover = "{theme.main_darken_hover}"
                         color: {theme.fg_color};
                         font-size: {self.scale(25, 'w')}px;
                         font-weight: bold;
-                        border: {self.scale(8, 'h')}px solid {theme.border_color};
-                        border-radius: {self.scale(23, 'h')}px;}}
+                        border: {self.scale(theme.border_width, 'h')}px solid {theme.border_color};
+                        border-radius: {self.scale(theme.border_radius, 'h')}px;}}
             QPushButton:hover {{
                 background-color: {theme.main_hover};
             }}
@@ -845,8 +801,8 @@ main_darken_hover = "{theme.main_darken_hover}"
                 margin: {self.scale(50, 'h')}px;
                 background-color: {theme.main_color};
                 color: {theme.fg_color};
-                border: {self.scale(8, 'h')}px solid {theme.border_color};
-                border-radius: {self.scale(23, 'h')}px;
+                border: {self.scale(theme.border_width, 'h')}px solid {theme.border_color};
+                border-radius: {self.scale(theme.border_radius, 'h')}px;
                 padding-top: {self.scale(150, 'h')}px;
                 padding-left: {self.scale(10, 'w')}px;
             }}
@@ -858,23 +814,23 @@ main_darken_hover = "{theme.main_darken_hover}"
                 background-color: {theme.main_color};
                 width: {self.scale(20, 'w')}px;
                 margin: 0 {self.scale(9, 'h')}px {self.scale(25, 'w')}px 0;
-                border-radius: {self.scale(23, 'h')}px;
+                border-radius: {self.scale(theme.border_radius, 'h')}px;
             }}
             QScrollBar::handle:vertical {{
                 background-color: {theme.fg_color};
                 min-height: {self.scale(20, 'h')}px;
-                border-radius: {self.scale(23, 'h')}px;
+                border-radius: {self.scale(theme.border_radius, 'h')}px;
             }}
             QScrollBar:horizontal {{
                 background-color: {theme.main_color};
                 height: {self.scale(12, 'h')}px;
                 margin: 0px;
-                border-radius: {self.scale(23, 'h')}px;
+                border-radius: {self.scale(theme.border_radius, 'h')}px;
             }}
             QScrollBar::handle:horizontal {{
                 background-color: {theme.fg_color};
                 min-width: {self.scale(20, 'w')}px;
-                border-radius: {self.scale(23, 'h')}px;
+                border-radius: {self.scale(theme.border_radius, 'h')}px;
             }}
             QScrollBar::add-line, QScrollBar::sub-line {{
                 width: 0px;
@@ -915,7 +871,6 @@ main_darken_hover = "{theme.main_darken_hover}"
                 width: 20px;
             }}
         """)
-
 
     """   KawaīM —— o(*￣▽￣*)ブ   """
     def keyPressEvent(self, event):
@@ -975,10 +930,20 @@ main_darken_hover = "{theme.main_darken_hover}"
         elif event.key() == Qt.Key_F12:
             self.stretched_histogram()
         elif event.key() == Qt.Key_L:
+            theme.settings.setValue("theme", 1)
             theme.switch_to_theme_1()
             self.update_theme()
         elif event.key() == Qt.Key_K:
+            theme.settings.setValue("theme", 2)
             theme.switch_to_theme_2()
+            self.update_theme()
+        elif event.key() == Qt.Key_J:
+            theme.settings.setValue("theme", 3)
+            theme.switch_to_theme_3()
+            self.update_theme()
+        elif event.key() == Qt.Key_M:
+            theme.settings.setValue("theme", 4)
+            theme.switch_to_theme_4()
             self.update_theme()
         if event.key() == Qt.Key_1:
             self.equalized_histogram()
