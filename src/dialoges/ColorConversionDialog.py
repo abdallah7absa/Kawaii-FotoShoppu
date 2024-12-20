@@ -1,5 +1,11 @@
 
 from PyQt5.QtWidgets import *
+import os
+import sys
+
+parent_dir = os.path.abspath(os.path.join(os.getcwd(), os.pardir))
+sys.path.insert(0, parent_dir)
+from theme import theme
 
 
 class ColorConversionDialog(QDialog):
@@ -8,7 +14,7 @@ class ColorConversionDialog(QDialog):
         self.setWindowTitle("Atai daiarogu")
         self.setGeometry(200, 200, 300, 50)
 
-        self.setStyleSheet("background-color: #ffffff;")
+        self.setStyleSheet(f"background-color: {theme.dialog_bg}; border: 2px solid {theme.dialog_border}")
 
         self.red_spin = QDoubleSpinBox()
         self.green_spin = QDoubleSpinBox()
@@ -19,7 +25,7 @@ class ColorConversionDialog(QDialog):
             spin_box.setRange(0, 1)
             spin_box.setSingleStep(0.01)
             spin_box.setStyleSheet(
-                "background-color: #dd91b9; color: white; border-radius: 0px; border: 2px solid #983569; padding: 5px 10px; font-weight: bold;"
+                f"background-color: {theme.spin_bg}; color: {theme.spin_text}; border-radius: 0px; border: 2px solid {theme.spin_border}; padding: 5px 10px; font-weight: bold;"
             )
 
         self.red_spin.setValue(0.299)
@@ -27,7 +33,7 @@ class ColorConversionDialog(QDialog):
         self.blue_spin.setValue(0.114)
         self.threashhold_spin.setValue(0.5)
 
-        label_style = "color: #983569; font-weight: bold; font-size: 16px"
+        label_style = f"color: {theme.label_color}; font-weight: bold; font-size: 16px; border-width: 0px;"
         
         self.red_label = QLabel("Red Coefficient")
         self.red_label.setStyleSheet(label_style)
@@ -44,22 +50,22 @@ class ColorConversionDialog(QDialog):
         self.apply_button = QPushButton("Apply")
         self.apply_button.clicked.connect(self.accept)
         self.apply_button.setStyleSheet(
-            """
-            QPushButton {
-                background-color: #dd91b9;
+            f"""
+            QPushButton {{
+                background-color: {theme.button_bg};
                 color: white;
-                border: 2px solid #983569;
+                border: 2px solid {theme.button_border};
                 border-radius: 0px;
                 padding: 5px 10px;
                 font-weight: bold;
                 margin: 20px 0px 10px 0px;
-            }
-            QPushButton:hover {
-                background-color: #e5a1c1;
-            }
-            QPushButton:pressed {
-                background-color: #c57b9a;
-            }
+            }}
+            QPushButton:hover {{
+                background-color: {theme.button_hover};
+            }}
+            QPushButton:pressed {{
+                background-color: {theme.button_pressed};
+            }}
             """
         )
 
