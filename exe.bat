@@ -1,1 +1,1 @@
-pyinstaller --name KawaiiFotoShoppu --noconsole --onefile --icon=assets/kawaii-assets/images/icon.ico splash.py
+pyinstaller --name KawaiiFotoShoppu --noconsole --onefile --icon=assets/kawaii-assets/images/icon.ico src/splash.py
