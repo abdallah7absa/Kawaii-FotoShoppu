@@ -21,6 +21,7 @@ import dialoges.CutoffAndOrderDialog
 import dialoges.CutoffDialog
 from screeninfo import get_monitors
 import error
+import successful
 from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent
 import info
 from theme import theme
@@ -448,6 +449,13 @@ class KawaīFotoShoppu(QMainWindow):
 
                 if not image.save(file_path, file_extension):
                     self.raise_error("Failed to save the image.")
+                self.play_mp3(f"{theme.sound_assets}/waku.mp3")
+                successful_window = successful.SuccessfulWindow(self)
+                successful_window.successful_message.setText("Image Saved Successfully. o(*￣▽￣*)ブ")
+                if not successful_window.exec_(): self.play_mp3(f"{theme.sound_assets}/baa.mp3")
+            else:
+                self.play_mp3(f"{theme.sound_assets}/boom.mp3")
+                self.raise_error("Image not saved, no baaaka!")
         else:
             self.play_mp3(f"{theme.sound_assets}/boom.mp3")
             self.raise_error("No Image to Export, no baaaka!")
@@ -469,7 +477,7 @@ class KawaīFotoShoppu(QMainWindow):
     def clear(self, event):
         if len(self.undo_stack) == 0:
             self.play_mp3(f"{theme.sound_assets}/boom.mp3")
-            self.raise_error("This is already the original image, no baaaka!")
+            self.raise_error("No Filter to clear, Baaaka!")
             return
         if(self.showing_image):
             if self.current_filter == "":
@@ -1006,7 +1014,7 @@ class KawaīFotoShoppu(QMainWindow):
                         self.showing_image = f"{theme.image_assets}/output.{self.file_name.split('.')[-1]}"
                     else:
                         self.file_name = self.showing_image
-                    img.brightness_operations(self.file_name, self.showing_image, selectino, brightness_value)
+                    img.brightness_operations(self.file_name, self.showing_image, selection, brightness_value)
                     self.stop_mp3()
                     self.play_mp3(f'{theme.sound_assets}/a42.mp3')
                     self.showing_image_show()

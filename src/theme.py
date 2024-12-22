@@ -39,7 +39,8 @@ class Theme:
     def switch_to_theme_2(self):
         self.image_assets = "../assets/kawaii-assets/images"
         self.sound_assets = "../assets/kawaii-assets/sounds"
-        self.gif_assets = "../assets/kawaii-assets/gifs"
+        self.error_gif_assets = "../assets/kawaii-assets/gifs/error"
+        self.successful_gif_assets = "../assets/kawaii-assets/gifs/successful"
         self.main_color = "#DD91B9"
         self.main_color_darken = "#983569"
         self.fg_color = "#FFFFFF"
@@ -67,6 +68,10 @@ class Theme:
         self.button_hover = "#e5a1c1"
         self.button_pressed = "#c57b9a"
         self.dialog_border = "#FFFFFF"
+        self.successful_bg_color = "#3CBE61"
+        self.successful_border_color = "#1C6932"
+        self.close_successful_color = "#9EF1B6"
+        self.successful_message_color = "#FFFFFF"
 
     # def switch_to_theme_3(self):
     #     self.image_assets = "../assets/naruto-assets/images"
@@ -89,7 +94,8 @@ class Theme:
     def switch_to_theme_4(self):
         self.image_assets = "../assets/modern-assets/images"
         self.sound_assets = "../assets/modern-assets/sounds"
-        self.gif_assets = "../assets/modern-assets/gifs"
+        self.error_gif_assets = "../assets/modern-assets/gifs/error"
+        self.successful_gif_assets = "../assets/modern-assets/gifs/successful"
         self.main_color = "#000000"
         self.main_color_darken = "#531111"
         self.fg_color = "#FFFFFF"
@@ -117,5 +123,9 @@ class Theme:
         self.button_hover = "#222222"
         self.button_pressed = "#000000"
         self.dialog_border = "#FFFFFF"
+        self.successful_bg_color = "#040205"
+        self.successful_border_color = "#FFFFFF"
+        self.close_successful_color = "#FFFFFF"
+        self.successful_message_color = "#FFFFFF"
 
 theme = Theme()

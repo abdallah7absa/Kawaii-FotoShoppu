@@ -1,0 +1,92 @@
+import sys
+import os
+import random
+from PyQt5.QtWidgets import QApplication, QLabel, QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QFrame, QDialog
+from PyQt5.QtGui import QMovie, QFont, QMouseEvent, QIcon
+from PyQt5.QtCore import Qt, QPoint, QSize
+from theme import theme
+
+class SuccessfulWindow(QDialog):
+    def __init__(self, parent=None):
+        super().__init__()
+
+        self.offset = None
+
+        self.gifs_folder = theme.successful_gif_assets
+        self.image_assets = theme.image_assets
+
+        self.outer_layout = QVBoxLayout(self)
+        self.outer_layout.setContentsMargins(0, 0, 0, 0)
+        
+        self.frame = QFrame(self)
+        self.frame.setStyleSheet(f"QFrame {{ background-color: {theme.successful_bg_color}; border: 8px solid {theme.successful_border_color}; }}")
+        
+        self.main_layout = QVBoxLayout(self.frame)
+        
+        self.close_button = QPushButton('x', self)
+        self.close_button.clicked.connect(self.close)
+        self.close_button.setStyleSheet("QPushButton {"
+                                   "border: none; "
+                                   "font-size: 50px; "
+                                   "padding: 0px; "
+                                   f"color: {theme.close_successful_color}"
+                                   "}")
+        
+        self.top_layout = QHBoxLayout()
+        self.top_layout.addStretch()
+        self.top_layout.addWidget(self.close_button)
+        
+        self.main_layout.addLayout(self.top_layout)
+        
+        self.gif_label = QLabel(self)
+        self.gif_label.setStyleSheet("""
+            QLabel{
+                border-width: 0;
+                padding: 15;
+            }
+            """)
+        self.gif = QMovie(self.get_random_gif())
+        self.gif_label.setMovie(self.gif)
+        # gif.setScaledSize(QSize(300, 300))
+        self.gif.start()
+        self.main_layout.addWidget(self.gif_label, alignment=Qt.AlignCenter)
+        
+        self.successful_message = QLabel("Successful Message", self)
+        self.font = QFont('Inter', 20)
+        self.font.setBold(True)
+        self.successful_message.setFont(self.font)
+        self.successful_message.setStyleSheet(f"color: {theme.successful_message_color}; background: none; padding: 20px; border: none;")  # Add padding around the message
+        self.successful_message.setAlignment(Qt.AlignCenter)
+        self.main_layout.addWidget(self.successful_message, alignment=Qt.AlignCenter)
+        
+        self.frame.setLayout(self.main_layout)
+        
+        self.outer_layout.addWidget(self.frame)
+        
+        self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint)
+        # self.setFixedSize(500, 400)
+        self.setWindowTitle("WakuWaku!")
+        self.setWindowIcon(QIcon(f'{self.image_assets}/icon.png'))
+
+    def get_random_gif(self):
+        self.gifs = [os.path.join(self.gifs_folder, f) for f in os.listdir(self.gifs_folder) if f.endswith('.gif')]
+        return random.choice(self.gifs)
+    
+    def mousePressEvent(self, event: QMouseEvent):
+        if event.button() == Qt.LeftButton:
+            self.offset = event.pos()
+    
+    def mouseMoveEvent(self, event: QMouseEvent):
+        if self.offset is not None:
+            self.move(self.pos() + event.globalPos() - self.mapToGlobal(self.offset))
+            event.accept()
+    
+    def mouseReleaseEvent(self, event: QMouseEvent):
+        self.offset = None
+
+if __name__ == '__main__':
+
+    app = QApplication(sys.argv)
+    ex = SuccessfulWindow()
+    ex.show()
+    sys.exit(app.exec_())

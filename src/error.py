@@ -12,7 +12,7 @@ class ErrorWindow(QDialog):
 
         self.offset = None
 
-        self.gifs_folder = theme.gif_assets
+        self.gifs_folder = theme.error_gif_assets
         self.image_assets = theme.image_assets
 
         self.outer_layout = QVBoxLayout(self)
